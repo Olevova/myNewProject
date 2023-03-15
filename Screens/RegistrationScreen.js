@@ -18,9 +18,7 @@ const date = {
 
 const loadFonts = async () => {
   await Font.loadAsync({
-    "Robot-Regular": require("../assets/fonts/aRoboto-Regular.ttf"),
-    "Robot-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-    "Robot-Bold": require("../assets/fonts/Roboto-Bold.ttf")
+    "Robot-Regular": require("../assets/fonts/Roboto-Regular.ttf")
   });
 }
 
@@ -28,17 +26,19 @@ const loadFonts = async () => {
 export const RegistrationScreen = () => {
     const [changemargin, changemarginState] = useState(false);
     const [inputDate, inputDateState] = useState(date);
+    
     const keyBordHide = () => {
-    Keyboard.dismiss();
+        Keyboard.dismiss();
         console.log(inputDate);
         inputDateState(date);
-          if (!isReady) {
-  return( <AppLoading
+    }
+        if (!isReady) {
+        return( <AppLoading
     startAsync={loadFonts}
     onFinish={() => setIsReady(true)}
     onError={console.warn} />)
 }
-}
+
     return (
     <View style={styles.registration}>
            <Text style={styles.title}>Регистрация</Text>                
@@ -75,6 +75,8 @@ const styles = StyleSheet.create({
         marginTop:92,
     },
     input: {
+    fontFamily: 'Robot-Regular',
+    fontSize: 16,
     marginHorizontal: 16,
     borderWidth: 1,
     color: '#BDBDBD',
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
     },
     btnTitle:{
         color: '#FFFFFF',
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Regular',
         fontSize: 16,
         lineHeight: 19,
     },
