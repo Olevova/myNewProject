@@ -11,37 +11,29 @@ import {
   Keyboard, 
   Platform,
 } from "react-native";
-import { RegistrationScreen } from './Screens/RegistrationScreen';
-import { LoginScreen } from "./Screens/LoginScreen";
+import  {RegistrationScreen}  from './Screens/RegistrationScreen';
+// import { LoginScreen } from "./Screens/LoginScreen";
 
 
 
 
 
 export default function App() {
-  const [value, setValue] = useState("");
-  const inputHandler = (text) => setValue(text);
-  const [isReady, setIsReady] = useState(false);
+  // const [value, setValue] = useState("");
+  // const inputHandler = (text) => setValue(text);
+  // const [isReady, setIsReady] = useState(false);
 
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        
-
         <ImageBackground style={styles.image} source={require('./assets/image/PhotoBG.jpg')}>
-      
-       {/* <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}> */}
-              <RegistrationScreen styles={styles.registerBlock } />
-        {/* </KeyboardAvoidingView> */}
-       
+                    <RegistrationScreen />
         </ImageBackground>
-        
-        </View>
-        </TouchableWithoutFeedback>
-        
-      </>
+      </View>
+      </TouchableWithoutFeedback> 
+    </>
   );
 }
 

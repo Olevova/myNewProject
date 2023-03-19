@@ -26,7 +26,8 @@ const loadFonts = async () => {
 
 export const LoginScreen = () => {
     const [inputDate, inputDateState] = useState(date);
-
+    // const [isReady, setIsReady] = useState(false)
+    const isReady = null;
     const keyBordHide = () => {
         Keyboard.dismiss();
         console.log(inputDate);
@@ -34,10 +35,10 @@ export const LoginScreen = () => {
     }
 
 if (!isReady) {
-        return( <AppLoading
+        return <AppLoading
     startAsync={loadFonts}
     onFinish={() => setIsReady(true)}
-    onError={console.warn} />)
+    onError={console.warn} />
 }
 
     return (<TouchableWithoutFeedback onPress={Keyboard.dismiss}>

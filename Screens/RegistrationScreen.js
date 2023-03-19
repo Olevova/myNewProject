@@ -4,12 +4,13 @@ import  {
   TextInput,
   Text,
     TouchableOpacity,
-    Keyboard
+    Keyboard,
   
 } from "react-native";
 import React, { useState } from "react";
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+
 const date = {
     login: "",
     email: "",
@@ -26,21 +27,21 @@ const loadFonts = async () => {
 export const RegistrationScreen = () => {
     const [changemargin, changemarginState] = useState(false);
     const [inputDate, inputDateState] = useState(date);
+    const [isReady, setIsReady] = useState(false);
+    // const isReady = null;
     
     const keyBordHide = () => {
         Keyboard.dismiss();
         console.log(inputDate);
         inputDateState(date);
     }
-        if (!isReady) {
-        return( <AppLoading
-    startAsync={loadFonts}
-    onFinish={() => setIsReady(true)}
-    onError={console.warn} />)
+
+if (!isReady) {
+        return( <AppLoading startAsync={loadFonts} onFinish={() => setIsReady(true)} onError={console.warn} />)
 }
 
-    return (
-    <View style={styles.registration}>
+    return (<>
+        <View style={styles.registration}>
            <Text style={styles.title}>Регистрация</Text>                
             <TextInput value={inputDate.login} style={styles.input} textAlign={'left'} placeholder={'Логин'} placeholderTextColor={"#BDBDBD"} autoFocus={true} onFocus={()=>changemarginState(true) } onChangeText ={(text)=>inputDateState((prevState)=>({...prevState, login:text}))} />
             <TextInput value={inputDate.email} style={styles.input} textAlign={'left'} placeholder={'Адрес электронной почты'} placeholderTextColor={"#BDBDBD"} onFocus={() => changemarginState(true) } onChangeText ={(text)=>inputDateState((prevState)=>({...prevState,email:text}))}/>
@@ -49,7 +50,8 @@ export const RegistrationScreen = () => {
                    <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                </TouchableOpacity>  
             <Text style={{ ...styles.regtext, marginBottom: changemargin ? 66 : 66  }}>Уже есть аккаунт? Войти</Text>
-    </View> 
+        </View> 
+        </>
         
     )
 } 
