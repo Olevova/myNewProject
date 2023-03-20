@@ -7,9 +7,12 @@ import  {
     Keyboard,
   
 } from "react-native";
-import React, { useState } from "react";
-import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
+import React, { useState, useCallback } from "react";
+// import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
+// import { AppLoading } from 'expo';
+import * as SplashScreen from 'expo-splash-screen';
+SplashScreen.preventAutoHideAsync();
 
 const date = {
     login: "",
@@ -17,31 +20,35 @@ const date = {
     password: ""
 }
 
-const loadFonts = async () => {
-  await Font.loadAsync({
-    "Robot-Regular": require("../assets/fonts/Roboto-Regular.ttf")
-  });
-}
-
 
 export const RegistrationScreen = () => {
+
+    const [fontsLoaded] = useFonts({
+        "Robot-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+        "EduNSWACTFoundation-Bold": require("../assets/fonts/EduNSWACTFoundation-Bold.ttf")
+    });
+    
+    const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+    }, [fontsLoaded]);
+    
+
     const [changemargin, changemarginState] = useState(false);
     const [inputDate, inputDateState] = useState(date);
-    const [isReady, setIsReady] = useState(false);
-    // const isReady = null;
-    
     const keyBordHide = () => {
         Keyboard.dismiss();
         console.log(inputDate);
         inputDateState(date);
     }
 
-if (!isReady) {
-        return( <AppLoading startAsync={loadFonts} onFinish={() => setIsReady(true)} onError={console.warn} />)
+if (!fontsLoaded) {
+        return null
 }
 
     return (<>
-        <View style={styles.registration}>
+        <View style={styles.registration} onLayout={onLayoutRootView}>
            <Text style={styles.title}>Регистрация</Text>                
             <TextInput value={inputDate.login} style={styles.input} textAlign={'left'} placeholder={'Логин'} placeholderTextColor={"#BDBDBD"} autoFocus={true} onFocus={()=>changemarginState(true) } onChangeText ={(text)=>inputDateState((prevState)=>({...prevState, login:text}))} />
             <TextInput value={inputDate.email} style={styles.input} textAlign={'left'} placeholder={'Адрес электронной почты'} placeholderTextColor={"#BDBDBD"} onFocus={() => changemarginState(true) } onChangeText ={(text)=>inputDateState((prevState)=>({...prevState,email:text}))}/>
@@ -68,7 +75,7 @@ const styles = StyleSheet.create({
 
     },
     title: {
-        fontFamily: 'Robot-Regular',
+        fontFamily:'Robot-Regular',
         fontSize: 30,
         lineHeight: 35,
         textAlign: 'center',
