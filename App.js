@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useCallback } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -11,61 +11,50 @@ import {
   Keyboard, 
   Platform,
 } from "react-native";
-import  {RegistrationScreen}  from './Screens/RegistrationScreen';
-// import { LoginScreen } from "./Screens/LoginScreen";
+import { useFonts } from 'expo-font';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+SplashScreen.preventAutoHideAsync();
+import { useRoute } from "./router";
 
 
 
 
 
 export default function App() {
-  // const [value, setValue] = useState("");
-  // const inputHandler = (text) => setValue(text);
-  // const [isReady, setIsReady] = useState(false);
+    const routing = useRoute(2);
+     const [fontsLoaded] = useFonts({
+        "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+        "EduNSWACTFoundation-Bold": require("./assets/fonts/EduNSWACTFoundation-Bold.ttf")
+    });
+    
+    const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+    }, [fontsLoaded]);
+  
+
+   
+if (!fontsLoaded) {
+        return null
+}
 
 
   return (
-    <>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <ImageBackground style={styles.image} source={require('./assets/image/PhotoBG.jpg')}>
-                    <RegistrationScreen />
-        </ImageBackground>
-      </View>
-      </TouchableWithoutFeedback> 
-    </>
+    <NavigationContainer onLayout={onLayoutRootView}>
+     {routing}
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "yellow",
-    // alignItems: "center",
-    // justifyContent: "center",
-    // paddingBottom: 30
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
-    // alignItems:"center"
-  },
-  // registerBlock: {
-  //   display: "flex",
-  //   justifyContent: "flex-end"
-  // }
-  // input: {
-  //   borderWidth: 1,
-  //   borderColor: 'white',
-  //   marginHorizontal: 10,
-  //   borderRadius: 15, 
-  //   color: 'white',
-  //   backgroundColor:'black'
-    
-  // },
-  // title: {
-  //   color: 'white'
-    
-  // }
-});
+
+ {/* <HomeStac.Navigator>
+        <HomeStac.Screen name='Posts' component={PostsScreen} />
+        <HomeStac.Screen name='Profile' component={ProfileScreen} />
+        <HomeStac.Screen name='CreatePost' component={CreatePostsScreen} />
+      </HomeStac.Navigator>
+      {/* <MainStack.Navigator>
+        <MainStack.Screen options={{headerShown: false}} name='Registartion' component={RegistrationScreen}/>
+        <MainStack.Screen options={{headerShown: false}} name='Login' component={LoginScreen}/>
+    </MainStack.Navigator>   */} 
