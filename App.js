@@ -42,12 +42,24 @@ if (!fontsLoaded) {
 
 
   return (
-    <NavigationContainer onLayout={onLayoutRootView}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
+    <NavigationContainer >
      {routing}
     </NavigationContainer>
+    </View>
   );
 }
 
+
+const styles = StyleSheet.create(
+    
+  {
+    container: {
+      flex: 1
+    }
+  }
+)
+// onLayout={onLayoutRootView}
 
  {/* <HomeStac.Navigator>
         <HomeStac.Screen name='Posts' component={PostsScreen} />
