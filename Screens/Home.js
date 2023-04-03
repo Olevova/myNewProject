@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 
-export const Home = ({navigation }) => {
+export const Home = () => {
     return (
         <View style={styles.home}>
             <Text style={styles.textHome}>Home Page</Text>

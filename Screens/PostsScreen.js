@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 
-export const PostsScreen = ({navigation }) => {
+export const PostsScreen = () => {
     return (
         <View style={styles.home}>
             <Text style={styles.textHome}>PostScreen</Text>

@@ -21,7 +21,7 @@ export const useRoute = (isAuth) => {
       <MainStack.Screen options={{ headerShown: false }} name='Login' component={LoginScreen} />
     </MainStack.Navigator>
   }
-  return (<HomeStac.Navigator tabBarOptions={{tabBarShowLabel:false}}>
+  return (<HomeStac.Navigator >
       <HomeStac.Screen name='Posts' component={PostsScreen}
       options= {
         {headerStyle: {
@@ -36,11 +36,14 @@ export const useRoute = (isAuth) => {
                 onPress={() => alert("This is a button!")}
                 title="Log out"
                 color="#fff"
-              />, tabBarIcon: ({ focused, size, color }) => <MaterialCommunityIcons name="postage-stamp" size={size} color={color} /> }
+          />,
+          tabBarIcon: ({ size, color }) => <MaterialCommunityIcons name="postage-stamp" size={size} color={color} />
+        }
           } />
       <HomeStac.Screen name='Profile' component={ProfileScreen}
-      options={{tabBarIcon:({focused, size, color})=><AntDesign name="profile" size={size} color={color} />}} />
+      options={{tabBarIcon:({ size, color})=><AntDesign name="profile" size={size} color={color} />}} />
       <HomeStac.Screen name='CreatePost' component={CreatePostsScreen}
-      options={{tabBarIcon:({focused, size, color})=><Ionicons name="create" size={size} color={color} />}}/>
+      options={{tabBarIcon:({ size, color})=><Ionicons name="create" size={size} color={color} />}}/>
   </HomeStac.Navigator>)
 }
+// tabBarOptions={{tabBarShowLabel: false}}

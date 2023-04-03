@@ -5,7 +5,7 @@ import {
 } from "react-native";
 
 
-export const ProfileScreen = ({navigation }) => {
+export const ProfileScreen = () => {
     return (
         <View style={styles.home}>
             <Text style={styles.textHome}>ProfileScreen</Text>
