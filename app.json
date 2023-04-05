@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
+    ],
     "name": "myNewProject",
     "slug": "myNewProject",
     "version": "1.0.0",
@@ -29,5 +37,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }
