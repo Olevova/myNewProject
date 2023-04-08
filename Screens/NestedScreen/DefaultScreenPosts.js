@@ -16,6 +16,7 @@ export const DefaultScreenPosts = ({ route, navigation }) => {
     
     useEffect(() => {
         if (route.params) {
+            console.log(route.params, 22, navigation, 33);
             setPosts((prevState) => [...prevState, route.params]);
         }
     }, [route.params])
@@ -30,8 +31,17 @@ export const DefaultScreenPosts = ({ route, navigation }) => {
                 justifyContent: "center",
                 alignItems: "center",
             }}>
-                        <Image source={{ uri: item.photo }} style={{width:200, height:200}} />
-                    </View>)}
+                        
+                    <Image source={{ uri: item.photo }} style={{ width: 200, height: 200 }} />
+                    {item.inputData.pictureName &&
+                       (<View>
+                        <Text>{item.inputData.pictureName}</Text>
+                        </View>)}
+                     {item.inputData.pictureLocation &&
+                       (<View>
+                        <Text>{item.inputData.pictureLocation}</Text>
+                        </View>)}
+                </View>)}
             />
             <Button title="go to map" onPress={() => navigation.navigate('MapScreen')} />
             <Button title="go to comment" onPress={()=>navigation.navigate('CommentsScreen')}/>

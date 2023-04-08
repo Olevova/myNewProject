@@ -69,7 +69,7 @@ export const CreatePostsScreen = ({navigation}) => {
     }
 
     const sendPhoto = async () => {
-        await navigation.navigate("DefaultScreenPosts", { photo })
+        await navigation.navigate("DefaultScreenPosts", { photo, location, inputData})
         setPhoto(null);
     }
     return (
