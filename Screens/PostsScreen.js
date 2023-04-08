@@ -1,51 +1,19 @@
-import React,{ useEffect, useState } from "react";
-import {
-    StyleSheet,
-    View,
-    Text,
-    Image,
-    FlatList
-} from "react-native";
+import React from "react";
+// import { moduleName } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import {MapScreen} from "./NestedScreen/MapScreen";
+import {DefaultScreenPosts} from './NestedScreen/DefaultScreenPosts';
+import {CommentsScreen} from './NestedScreen/CommentsScreen';
 
 
-export const PostsScreen = ({ route }) => {
-    const [posts, setPosts] = useState([]);
-    useEffect(() => {
-        if (route.params) {
-            setPosts((prevState) => [...prevState, route.params]);
-        }
-    }, [route.params])
-    console.log(posts);
-    
-    return (
-        <View style={styles.home}>
-            <FlatList 
-                data={posts}
-                keyExtractor={(i, indx) => { console.log(indx.toString());return indx.toString() }}
-                renderItem={({item}) =>(<View style={{
-              marginBottom: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}>
-                        <Image source={{ uri: item.photo }} style={{width:200, height:200}} />
-                    </View>)}
-            />
-        </View>
-    )
+
+const NestedScreen = createStackNavigator();
+
+export const PostsScreen = () => {
+    return (<NestedScreen.Navigator>
+        <NestedScreen.Screen name='DefaultScreenPosts' component={DefaultScreenPosts } />
+        <NestedScreen.Screen name='MapScreen' component={MapScreen} /> 
+        <NestedScreen.Screen name='CommentsScreen' component={CommentsScreen}/> 
+    </NestedScreen.Navigator>)
 };
 
-const styles = StyleSheet.create(
-    {
-        home: {
-            flex:1,
-            fontSize: 40,
-            backgroundColor: "teal",
-            borderTopLeftRadius: 20 ,
-            borderTopRightRadius: 20 ,
-        },
-        textHome: {
-            margin: "auto",
-            textAlign: 'center',
-        }
-    }
-)
