@@ -11,6 +11,9 @@ import  {
 } from "react-native";
 import React, { useState, useCallback } from "react";
 
+import { useDispatch } from 'react-redux';
+import { authSignUser } from '../redux/auth/authOperation';
+
 
 const date = {
     login: "",
@@ -20,17 +23,21 @@ const date = {
 
 
 export const RegistrationScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
     console.log(navigation);
     const [inputDate, inputDateState] = useState(date);
     const keyBordHide = () => {
         Keyboard.dismiss();
-        console.log(inputDate);
         inputDateState(date);
+        dispatch(authSignUser(inputDate));
+        
     };
     const [changemargin, changemarginState] = useState(false);
-
+    const keyBoardHiden = () => {
+        Keyboard.dismiss()
+    }
     return (<>
-       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+       <TouchableWithoutFeedback onPress={keyBoardHiden}>
         <View style={styles.container} >
           <ImageBackground style={styles.image} source={require('../assets/image/fr.jpg')}>
         <View style={styles.registration}>

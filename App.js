@@ -1,64 +1,53 @@
-import React, { useState, useCallback } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Text,
-  KeyboardAvoidingView,
-  ImageBackground,
-  TouchableWithoutFeedback,
-  Keyboard, 
-  Platform,
-} from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
 import { useFonts } from 'expo-font';
-import * as Font from 'expo-font';
+import { Provider } from "react-redux";
+import {
+    StyleSheet,
+    View
+} from "react-native";
+
 import * as SplashScreen from 'expo-splash-screen';
 SplashScreen.preventAutoHideAsync();
-import { useRoute } from "./router";
+import { store } from "./redux/store";
+import Main from "./components/Main";
 
+console.log(Main);
 
+export default function App() { 
 
-
-
-export default function App() {
-    const routing = useRoute(2);
-     const [fontsLoaded] = useFonts({
+const [fontsLoaded] = useFonts({
         "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
         "EduNSWACTFoundation-Bold": require("./assets/fonts/EduNSWACTFoundation-Bold.ttf")
     });
     
-    const onLayoutRootView = useCallback(async () => {
+const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
-    }, [fontsLoaded]);
-  
-
+}, [fontsLoaded]);
+  // 
    
 if (!fontsLoaded) {
         return null
 }
-
-
+  console.log("start");
+  
   return (
-    <View style={styles.container} onLayout={onLayoutRootView}>
-    <NavigationContainer >
-     {routing}
-    </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container} onLayout={onLayoutRootView} >
+        <Main />
+      </View>
+    </Provider>
   );
 }
 
+// style={styles.container}
+const styles = StyleSheet.create({
+  container: {
+  flex: 1,
+}});
 
-const styles = StyleSheet.create(
-    
-  {
-    container: {
-      flex: 1
-    }
-  }
-)
+
 // onLayout={onLayoutRootView}
 
  {/* <HomeStac.Navigator>

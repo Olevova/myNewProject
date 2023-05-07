@@ -1,14 +1,23 @@
 import {
     StyleSheet,
     View,
-    Text
+    Text,
+    Button
 } from "react-native";
+// import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut } from "firebase/auth";
+// import { app } from '../firebase/config';
+// const auth = getAuth(app);
+import { authSignOutUser } from '../redux/auth/authOperation';
+import { useDispatch } from "react-redux";
 
 
 export const ProfileScreen = () => {
+    const dispatch = useDispatch();
+    const signOut = ()=> dispatch(authSignOutUser())
     return (
         <View style={styles.home}>
             <Text style={styles.textHome}>ProfileScreen</Text>
+            <Button title="SignOut" onPress={signOut}/>
         </View>
     )
 };

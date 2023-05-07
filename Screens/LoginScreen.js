@@ -12,6 +12,9 @@ import  {
   
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import {authSignIn} from '../redux/auth/authOperation'
+
 const date = {
     email: "",
     password: ""
@@ -21,19 +24,26 @@ const date = {
 export const LoginScreen = ({navigation }) => {
     const [inputDate, inputDateState] = useState(date);
     console.log(navigation);
-    const keyBordHide = () => {
+    const dispatch = useDispatch();
+    const signInProf = () => {
         Keyboard.dismiss();
         console.log(inputDate);
-        inputDateState(date);
+        dispatch(authSignIn(inputDate));
+        inputDateState(date);  
+        
     }
 
-    return (<TouchableWithoutFeedback onPress={()=>Keyboard.dismiss()}>
+    const keyBoardHiden = () => {
+        Keyboard.dismiss()
+    }
+
+    return (<TouchableWithoutFeedback onPress={keyBoardHiden}>
        <KeyboardAvoidingView behavior={Platform.OS ==="ios" ? "padding" : "height"}>
     <View style={styles.registration}>
            <Text style={styles.title}>Вхід</Text>                
                 <TextInput style={styles.input} textAlign={'left'} placeholder={'Адрес электронной почты'} placeholderTextColor={"#BDBDBD"} onChangeText={(text) => inputDateState((prevState) => ({ ...prevState, email: text }))} />
         <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true} placeholder ={'Пароль'} placeholderTextColor={"#BDBDBD"} password onChangeText={(text) => inputDateState((prevState) => ({ ...prevState, password: text }))}/>
-               <TouchableOpacity activeOpacity={0.7} style={styles.btn} onPress={()=>keyBordHide()}>
+               <TouchableOpacity activeOpacity={0.7} style={styles.btn} onPress={()=>signInProf()}>
                    <Text style={styles.btnTitle}>Війти</Text>
                 </TouchableOpacity>  
                 <TouchableOpacity onPress={()=>navigation.navigate('Registartion')}>
