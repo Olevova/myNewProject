@@ -7,10 +7,20 @@ import {
     TextInput
 
 } from "react-native";
+import { db } from '../firebase/config';
+import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from 'expo-location';
+import { app } from '../firebase/config';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { addDoc, collection } from "firebase/firestore"; 
+
+const storage = getStorage(app);
+// const db = getFirestore(app);
+
+
 // import { TouchableOpacity } from "react-native-gesture-handler";
 const pictureDate = {
     pictureName: "",
@@ -22,9 +32,51 @@ export const CreatePostsScreen = ({navigation}) => {
     const [cameraRef, setCameraRef] = useState(null);
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(CameraType.back);
-    const [location, setLocation] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
     const [inputData, inputDateState] = useState(pictureDate);
     const [changemargin, changemarginState] = useState(false);
+    const {userId, login} = useSelector((state)=>state.auth)
+
+    const uploadPhotoToFirebase = async () => {
+        const uniqId = Date.now().toString();
+        const storageRef = ref(storage, `postsImage/${uniqId}`);
+        const photoForBlob = await fetch(photo);
+        const photoForStorage = await photoForBlob.blob();
+        const metadata = {
+            contentType: 'image/jpeg',
+        };
+  
+        try {
+            await uploadBytes(storageRef, photoForStorage, metadata);
+            console.log('Завантаження до Firebase Storage успішно завершено');
+
+            const downloadURL = await getDownloadURL(storageRef);
+            console.log('URL завантаженого зображення:', downloadURL);
+            return downloadURL;
+        } catch (error) {
+            console.error('Помилка завантаження до Firebase Storage:', error);
+            return null;
+        }
+    };
+
+    const uploadDateToBase = async () => {
+        const photoURL = await uploadPhotoToFirebase();
+        console.log('URL завантаженого зображення:', photoURL);
+        try {
+            const docRef = await addDoc(collection(db, "posts"), {
+                photo: photoURL,
+                userId,
+                login,
+                inputData,
+                location: currentLocation.coords
+            });
+
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+
+    };
 
     useEffect(() => {
         (async () => {
@@ -33,11 +85,19 @@ export const CreatePostsScreen = ({navigation}) => {
             const { status } = await Camera.requestCameraPermissionsAsync();
             const data = await Location.requestForegroundPermissionsAsync();
             console.log(data.status);
-        setHasPermission(status === "granted");
-    })();
+            if (status !== 'granted') {
+                setErrorMsg('Permission to access location was denied');
+                return;
+            }
+            setHasPermission(status === "granted");
+            let location = await Location.getCurrentPositionAsync({});
+            // console.log("location", location);
+            setCurrentLocation(location);
+            // console.log('thisLocation', currentLocation, 15);
+            
+        })();
     }, []);
 
-    // console.log(navigation);
 
     if (hasPermission === null) {
             return <View />;
@@ -53,25 +113,26 @@ export const CreatePostsScreen = ({navigation}) => {
 
     const takePhoto = async () => {
         if (cameraRef) {
+            try {
             const data = await cameraRef.takePictureAsync();
             console.log(data.uri);
             setPhoto(data.uri);
-        //     const { status } = await Location.requestForegroundPermissionsAsync();
-        // if (status === 'granted') {
-            
-    //   }a
-           
+            console.log('thisLocation', currentLocation, 'inputData', inputData); 
+            } catch (error) {
+                console.log(error.message);
+            }
+                       
         }
-         const locationPhoto = await Location.getCurrentPositionAsync();
-            setLocation(locationPhoto);
-            console.log(location);
-            // await MediaLibrary.createAssetAsync(uri);
+        
     }
 
     const sendPhoto = async () => {
         await navigation.navigate("DefaultScreenPosts", { photo, location, inputData})
+        await uploadDateToBase();
         setPhoto(null);
     }
+
+    
     return (
         <View style={styles.home}>
             <Camera style={styles.camerastyle}
