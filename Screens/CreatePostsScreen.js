@@ -11,7 +11,7 @@ import { db } from '../firebase/config';
 import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+// import * as MediaLibrary from "expo-media-library";
 import * as Location from 'expo-location';
 import { app } from '../firebase/config';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -48,32 +48,32 @@ export const CreatePostsScreen = ({navigation}) => {
   
         try {
             await uploadBytes(storageRef, photoForStorage, metadata);
-            console.log('Завантаження до Firebase Storage успішно завершено');
+            console.log('Loaded in Firebase Storage succes');
 
             const downloadURL = await getDownloadURL(storageRef);
-            console.log('URL завантаженого зображення:', downloadURL);
+            // console.log('URL завантаженого зображення:', downloadURL);
             return downloadURL;
         } catch (error) {
-            console.error('Помилка завантаження до Firebase Storage:', error);
+            console.log (error.message);
             return null;
         }
     };
 
     const uploadDateToBase = async () => {
         const photoURL = await uploadPhotoToFirebase();
-        console.log('URL завантаженого зображення:', photoURL);
+        console.log('URL', photoURL);
         try {
             const docRef = await addDoc(collection(db, "posts"), {
                 photo: photoURL,
                 userId,
                 login,
                 inputData,
-                location: currentLocation.coords
+                location: currentLocation
             });
 
             console.log("Document written with ID: ", docRef.id);
         } catch (e) {
-            console.error("Error adding document: ", e);
+            console.log("Error adding document: ", error.message);
         }
 
     };
@@ -84,7 +84,7 @@ export const CreatePostsScreen = ({navigation}) => {
             setPhoto(null);
             const { status } = await Camera.requestCameraPermissionsAsync();
             const data = await Location.requestForegroundPermissionsAsync();
-            console.log(data.status);
+            // console.log(data.status);
             if (status !== 'granted') {
                 setErrorMsg('Permission to access location was denied');
                 return;
@@ -92,7 +92,9 @@ export const CreatePostsScreen = ({navigation}) => {
             setHasPermission(status === "granted");
             let location = await Location.getCurrentPositionAsync({});
             // console.log("location", location);
-            setCurrentLocation(location);
+            
+            setCurrentLocation(location === null ? {
+                    latitude: 37.4226711,longitude:-122.0849872} : location);
             // console.log('thisLocation', currentLocation, 15);
             
         })();
@@ -115,7 +117,7 @@ export const CreatePostsScreen = ({navigation}) => {
         if (cameraRef) {
             try {
             const data = await cameraRef.takePictureAsync();
-            console.log(data.uri);
+            // console.log(data.uri);
             setPhoto(data.uri);
             console.log('thisLocation', currentLocation, 'inputData', inputData); 
             } catch (error) {
@@ -171,33 +173,33 @@ export const CreatePostsScreen = ({navigation}) => {
 const styles = StyleSheet.create(
     {
         home: {
-            flex:1,
+            flex: 1,
             fontSize: 40,
             backgroundColor: "teal",
-            borderTopLeftRadius: 20 ,
-            borderTopRightRadius: 20 ,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
         },
         flipContainer: {
             flex: 0.2,
             alignSelf: "flex-end",
-         },
+        },
         textsnap: {
             // margin: "auto",
             
-            color:'#fff'
+            color: '#fff'
             // textAlign: 'center',
         },
-        camerastyle:{
+        camerastyle: {
             height: '60%',
-            marginTop: 20, 
+            marginTop: 20,
             justifyContent: 'flex-end',
             alignItems: 'center',
             borderRadius: 50,
-            borderWidth:1,
-            marginHorizontal:2,
+            borderWidth: 1,
+            marginHorizontal: 2,
             
         },
-        containercamera:{
+        containercamera: {
             borderWidth: 1,
             borderColor: "#ffff00",
             width: 70,
@@ -217,39 +219,39 @@ const styles = StyleSheet.create(
             // height: 200,
             // width:200
         },
-        containerLoad:{
+        containerLoad: {
             borderWidth: 1,
             borderColor: "#ffff00",
             borderRadius: 10,
             justifyContent: "center",
             alignItems: 'center',
-            height:40,
+            height: 40,
             marginTop: 20,
-            width:'90%',
-            marginHorizontal:5,
+            width: '90%',
+            marginHorizontal: 5,
             
         },
-    load: {
+        load: {
             alignItems: "center"
         },
         input: {
-    fontFamily: 'Roboto-Regular',
-    fontSize: 16,
-    width: "90%",
-    color: '#73564a',
+            fontFamily: 'Roboto-Regular',
+            fontSize: 16,
+            width: "90%",
+            color: '#73564a',
             backgroundColor: '#009688',
-    borderWidth:1,
-    // borderRadius: 8,
-    // borderColor: '#E8E8E8',
-    height: 30,
-    paddingBottom:3,
-    paddingTop:3,
-    paddingLeft:10,
-    marginBottom: 16,
-    marginTop: 16,
-    borderBottomColor:"#e25241",
-    marginHorizontal: 5,
-    },
+            borderWidth: 1,
+            // borderRadius: 8,
+            // borderColor: '#E8E8E8',
+            height: 30,
+            paddingBottom: 3,
+            paddingTop: 3,
+            paddingLeft: 10,
+            marginBottom: 16,
+            marginTop: 16,
+            borderBottomColor: "#e25241",
+            marginHorizontal: 5,
+        },
 
     }
 )

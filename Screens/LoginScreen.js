@@ -27,7 +27,7 @@ export const LoginScreen = ({navigation }) => {
     const dispatch = useDispatch();
     const signInProf = () => {
         Keyboard.dismiss();
-        console.log(inputDate);
+        // console.log(inputDate);
         dispatch(authSignIn(inputDate));
         inputDateState(date);  
         

@@ -24,7 +24,7 @@ const date = {
 
 export const RegistrationScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    console.log(navigation);
+    // console.log(navigation);
     const [inputDate, inputDateState] = useState(date);
     const keyBordHide = () => {
         Keyboard.dismiss();
